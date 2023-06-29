@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: 'convertor'
+#    image: откуда берем путь к нашему образу?
+    image: 'convector-currencies'
+    build: .
+    environment:
+#      Настраиваем доступ к контейнеру с backend
+#      настраиваемые переменные: [имя контейнера]:[номер хоста(внутренний)]
+      - API_CBR=https://www.cbr-xml-daily.ru
+    ports:
+      - '80:80'
