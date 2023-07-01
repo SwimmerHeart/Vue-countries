@@ -1,12 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" class="container is-fullhd">
+    <HeaderMenu />
     <router-view />
   </div>
 </template>
 <script>
-
+import HeaderMenu from "@/components/HeaderMenu"
 export default {
-  components: {}
+  components: {
+    HeaderMenu
+  }
 }
 
 </script>
@@ -18,6 +21,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100vh;
 }
 
 nav {
