@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomePage from "@/views/HomePage"
 import SignUp from "@/views/SignUpPage"
+import AuthPage from "@/views/AuthPage";
 
 
 Vue.use(VueRouter)
@@ -10,7 +11,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: SignUp
+    component: HomePage
   },
   {
     path: '/auth',
@@ -34,8 +35,8 @@ const router = new VueRouter({
   routes
 })
 
-router.beforeEach((from, to, next)=>{
-
-})
+// router.beforeEach((from, to, next)=>{
+//
+// })
 
 export default router

@@ -1,7 +1,7 @@
 import {handlerError, handlerResponse, handlerToJSON} from "@/api/handlers";
 
 export function query(url, config, {handlers} = {}) {
-    // console.warn('handlers', handlers)
+    console.warn('handlers', handlers)
     // проверять массив или просто объект в handlers
     // что если мы передаем handlers, но не передаем catch
 
@@ -42,7 +42,7 @@ export function query(url, config, {handlers} = {}) {
         _fetch = _fetch.catch(handlerError)
     }
 
-    // console.warn('_fetch', _fetch)
+    console.warn('_fetch', _fetch)
     return _fetch
 }
 

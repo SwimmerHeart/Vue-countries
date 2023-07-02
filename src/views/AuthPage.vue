@@ -1,10 +1,36 @@
 <template>
-<h1>AuthPage</h1>
+  <div class="section">
+    <div class="columns is-centered">
+      <AddUserForm class="box column is-6-tablet is-5-desktop"
+                   labelBtn="Авторизоваться"
+                   @addUser="addUser"
+      >
+        <h3>Авторизация</h3>
+      </AddUserForm>
+    </div>
+  </div>
 </template>
 
 <script>
+import AddUserForm from "@/components/AddUserForm"
+import {mapActions} from "vuex";
+
 export default {
-  name: "AuthPage"
+  name: "AuthPage",
+  components: {
+    AddUserForm
+  },
+  data (){
+    return {
+      user: {}
+    }
+  },
+  methods: {
+    ...mapActions(['GET_USERS']),
+    addUser(user){
+      this.user = user
+    }
+  },
 }
 </script>
 

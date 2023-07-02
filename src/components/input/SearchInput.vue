@@ -1,13 +1,15 @@
 <template>
   <VInput :placeholder="placeholder"
-           v-model="defaultValue"
+          type="search"
+          icon="magnify"
+          v-model="defaultValue"
   />
 </template>
 
 <script>
 import VInput from "@/components/framework/input/VInput"
 export default {
-  name: "DataCurrencyInput",
+  name: "SearchInput",
   components:{
     VInput
   },

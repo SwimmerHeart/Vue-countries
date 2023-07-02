@@ -1,6 +1,8 @@
 <template>
     <b-input :type="type"
+             :icon="icon"
              :placeholder="placeholder"
+             :maxlength="maxlength"
              v-model="defaultValue"
     />
 </template>
@@ -14,6 +16,14 @@ export default {
     },
     placeholder:{
       type: String,
+      default: ''
+    },
+    icon:{
+      type: String,
+      default: ''
+    },
+    maxlength: {
+      type: [Number, String],
       default: ''
     },
     type:{

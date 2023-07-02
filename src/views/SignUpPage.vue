@@ -1,22 +1,40 @@
 <template>
   <div class="section">
       <div class="columns is-centered">
-        <div class="box column is-narrow">
-          <b-field label="Логин">
-            <b-input value="Kevin Garvey"></b-input>
-          </b-field>
-          <b-field label="Пароль"
-                   :message="['Password is too short', 'Password must have at least 8 characters']">
-            <b-input value="123" type="password" maxlength="10"></b-input>
-          </b-field>
-        </div>
+        <AddUserForm class="box column is-6-tablet is-5-desktop"
+                     labelBtn="Зарегистрироваться"
+                     @addUser="addUser"
+        >
+          <h3>Регистрация</h3>
+        </AddUserForm>
       </div>
   </div>
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+import AddUserForm from "@/components/AddUserForm"
 export default {
-  name: "SignUpPage"
+  name: "SignUpPage",
+  components: {
+    AddUserForm
+  },
+  data (){
+    return {
+      user: {}
+    }
+  },
+  methods: {
+    ...mapActions(['GET_USERS']),
+    addUser(user){
+      this.user = user
+    }
+  },
+  watch: {
+    user(){
+      this.GET_USERS(this.user)
+    }
+  },
 }
 </script>
 

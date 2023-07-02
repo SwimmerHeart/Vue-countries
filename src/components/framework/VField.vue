@@ -1,12 +1,18 @@
 <template>
-  <b-field>
+  <b-field :label="label">
    <slot></slot>
   </b-field>
 </template>
 
 <script>
 export default {
-  name: "VField"
+  name: "VField",
+  props: {
+    label: {
+      type: String,
+      default: ''
+    }
+  },
 }
 </script>
 
