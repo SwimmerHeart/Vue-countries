@@ -1,9 +1,9 @@
 <template>
-  <VInput :placeholder="placeholder"
-          type="search"
-          icon="magnify"
-          v-model="defaultValue"
-  />
+    <VInput :placeholder="placeholder"
+            type="search"
+            icon="magnify"
+            v-model="defaultValue"
+    />
 </template>
 
 <script>

@@ -1,18 +1,20 @@
 <template>
   <div class="section">
     <div class="columns">
-      <SearchInput
-          class="column is-12-mobile is-6-tablet is-3-desktop"
-          placeholder="Поиск по странам..."/>
+      <div class="column is-12-mobile is-6-tablet is-3-desktop">
+        <SearchInput placeholder="Поиск по странам..."
+                     v-model="country"
+        />
+      </div>
     </div>
-    <CountriesList />
+    <CountriesList :countries="filteredCountries"/>
   </div>
 </template>
 
 <script>
 import SearchInput from "@/components/input/SearchInput"
 import CountriesList from "@/components/CountriesList"
-import {allUrlBase, getCountriesData} from "@/api/counties/api";
+import {getCountriesData} from "@/api/counties/api";
 
 export default {
   name: "HomePage",
@@ -23,11 +25,9 @@ export default {
   mounted() {
     const getCountries = async () => {
       try {
-        const exchangeData = await getCountriesData()
+        this.countries = await getCountriesData()
+        // console.log(this.countries.filter(item=>item.name.common.toLowerCase().includes('ser')))
         // snackbarInfo('Данные о валютах загружены')
-        console.log(exchangeData)
-        this.countries = exchangeData
-
       } catch (error) {
         // snackbarError(error)
         console.log(error)
@@ -37,7 +37,18 @@ export default {
   },
   data (){
     return {
-      countries: []
+      countries: [],
+      country: ''
+    }
+  },
+  computed:{
+    filteredCountries (){
+      if(this.country){
+        return this.countries.filter(item=>item.name.common.toLowerCase().includes(this.country.toLowerCase()))
+      }
+      else {
+        return this.countries
+      }
     }
   }
 }
