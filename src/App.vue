@@ -1,27 +1,35 @@
 <template>
-  <div id="app" class="container is-fullhd">
-    <HeaderMenu />
-    <router-view />
+  <div id="app">
+    <component :is="layout">
+      <router-view />
+    </component>
   </div>
 </template>
 <script>
-import HeaderMenu from "@/components/HeaderMenu"
+import AuthLayout from "@/layouts/AuthLayout"
+import MainLayout from "@/layouts/MainLayout"
 export default {
   components: {
-    HeaderMenu
+    AuthLayout,
+    MainLayout
+  },
+  computed:{
+    layout(){
+      return (this.$route.meta.layout || 'auth') + '-layout'
+    }
   }
 }
 
 </script>
 
 <style lang="scss">
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100vh;
 }
 
 nav {
@@ -35,5 +43,6 @@ nav {
       color: #42b983;
     }
   }
+
 }
 </style>

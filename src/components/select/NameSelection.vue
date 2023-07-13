@@ -2,12 +2,14 @@
   <VSelect :options="options"
            v-model="selectedItem"
            :placeholder="placeholder"
+           :icon="icon"
   >
   </VSelect>
 </template>
 
 <script>
 import VSelect from "@/components/framework/select/VSelect"
+import {mapActions} from "vuex";
 export default {
   name: "USelect",
   components:{
@@ -26,20 +28,22 @@ export default {
     placeholder:{
       type: String,
       default: ''
+    },
+    icon: {
+      type: String,
+      default: ''
     }
   },
   methods:{
-    selectOption(option){
-      this.$emit('selectOption', option)
-    }
+    ...mapActions(['setCountryUser'])
   },
   computed:{
     selectedItem:{
       get(){
-        return this.value
+        return this.$store.getters.getCountryUser
       },
       set(value){
-        this.$emit('input', value)
+        this.setCountryUser(value)
       }
     }
   },

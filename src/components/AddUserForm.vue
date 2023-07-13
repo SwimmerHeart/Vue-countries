@@ -3,14 +3,14 @@
    <slot></slot>
     <AuthInput label="Логин"
                placeholder="Введите логин"
-               maxlength="15"
-               v-model="user.login"
+               maxlength="10"
+               v-model.trim="login"
     />
     <AuthInput label="Пароль"
                placeholder="Введите пароль"
                type="password"
                maxlength="10"
-               v-model="user.password"
+               v-model.trim="password"
     />
     <VButton submit="submit"
     >{{labelBtn}}
@@ -36,17 +36,21 @@ export default {
   },
   data (){
     return {
-      user: {
         login: '',
         password: ''
-      }
     }
   },
   methods: {
     onSubmit(){
-      this.$emit('addUser', this.user)
-      this.user.login = ''
-      this.user.password = ''
+      if(this.login && this.password){
+        const user = {
+          login: this.login,
+          password: this.password
+        }
+        this.$emit('addUser', user)
+        this.login = ''
+        this.password = ''
+      }
     }
   }
 }

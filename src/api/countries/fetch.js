@@ -1,4 +1,4 @@
-import {handlerError, handlerResponse, handlerToJSON} from "@/api/handlers";
+import {handlerError, handlerResponse, handlerToJSON} from "@/api/countries/handlers";
 
 export function query(url, config, {handlers} = {}) {
     // console.warn('handlers', handlers)
@@ -48,7 +48,7 @@ export function query(url, config, {handlers} = {}) {
 
 export function GET(url, params, options) {
     const paramsString = new URLSearchParams(params).toString()
-    return query(`${url}?${paramsString}`, undefined, options)
+    return query(`${url}${paramsString}`, undefined, options)
 }
 
 export function POST(url, data) {

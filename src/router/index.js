@@ -1,42 +1,91 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomePage from "@/views/HomePage"
-import SignUp from "@/views/SignUpPage"
+import store from '@/store'
+import HomePage from "@/views/CountriesPage"
+import SignUp from "@/views/RegistryPage"
 import AuthPage from "@/views/AuthPage";
+import AuthLayout from "@/layouts/AuthLayout"
 
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomePage
-  },
-  {
-    path: '/auth',
-    name: 'auth',
-    component: () => import('../views/AuthPage')
-  },
-  {
-    path: '/countries',
-    name: 'countries',
-    component: () => import('../views/CountryDetailsPage')
-  },
-  {
-    path: '/countries/university',
-    name: 'university',
-    component: () => import('../views/UniversityPage')
-  }
+    {
+        path: '/',
+        name: 'home',
+        meta: {layout: 'main'},
+        component: () => import('../views/CountryDetailsPage')
+    },
+    {
+        path: '/login',
+        name: 'login',
+        meta: {layout: 'auth'},
+        component: () => import('../views/AuthPage')
+    },
+    {
+        path: '/registry',
+        name: 'registry',
+        meta: {layout: 'auth'},
+        component: () => import('../views/RegistryPage')
+    },
+    {
+        path: '/countries',
+        name: 'countries',
+        meta: {layout: 'main', auth: true},
+        props: true,
+        component: () => import('../views/CountriesPage')
+    },
+    {
+        path: '/countries/country/:codeCountry',
+        name: 'countriesDetails',
+        meta: {layout: 'main', auth: true},
+        props: true,
+        component: () => import('../views/CountryDetailsPage')
+    },
+    {
+        path: '/country/:codeCountry/university/:nameUniversity',
+        name: 'university',
+        meta: {layout: 'main', auth: true},
+        component: () => import('../views/UniversityPage')
+    }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  routes
+    mode: 'history',
+    routes
 })
-
-// router.beforeEach((from, to, next)=>{
-//
-// })
+//метод выполняется перед каждой сменой роутера
+router.beforeEach((to, from, next) => {
+    // const currentUser = store.getters.GET_USER_NAME
+    const currentUser = store.getters.getUser
+    const isLoginPage = from.name === 'login'
+    const RegistryPage = from.name === 'registry'
+    const requiredAuth = to.matched.some(record => record.meta.auth)
+    if (requiredAuth && !currentUser) {
+        next({
+            path: '/login',
+            redirect: {name: 'login'}
+        })
+    }
+    else {
+        next()
+    }
+    // if (requiredAuth && !currentUser && isLoginPage) {
+    //     // Если пользователь не зарегистрирован, перенаправляем его на страницу регистрации
+    //     next({
+    //         path: '/registry',
+    //         redirect: { name: 'registry' }
+    //     })
+    // } else if (requiredAuth && !currentUser && RegistryPage) {
+    //     // Если неаутентифицированный пользователь пытается получить доступ к защищенному маршруту,
+    //     // перенаправляем его на страницу входа в систему
+    //     next({
+    //         path: '/login',
+    //         redirect: { name: 'login' }
+    //     });
+    // } else {
+    //     next();
+    // }
+})
 
 export default router

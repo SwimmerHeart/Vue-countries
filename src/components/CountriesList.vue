@@ -4,7 +4,10 @@
         v-for="(country, index) in countries"
         :key="index"
     >
-      <div class="card m-5 is-clickable">
+      <router-link :to="{ name: 'countriesDetails',
+      params: { codeCountry: country.cca3, props: country.name.common}}"
+                   class="card m-5 is-clickable"
+      >
         <div class="card-header card-image">
           <figure class="image is-4by3">
             <img :src="country.flags.png" :alt="country.flags.alt">
@@ -21,7 +24,8 @@
             </div>
           </div>
         </div>
-      </div>
+      </router-link>
+
     </li>
   </ul>
 </template>
@@ -38,13 +42,14 @@ export default {
   },
   data() {
     return {
-
+      page: 1,
+      list: []
     }
   },
   methods: {
     currency (country){
       return Object.values(country.currencies)[0]?.name
-    }
+    },
   }
 }
 </script>

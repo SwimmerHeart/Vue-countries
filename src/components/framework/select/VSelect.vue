@@ -1,21 +1,20 @@
 <template>
-    <b-select v-model="selectedItem"
-              :placeholder="placeholder"
+  <b-select v-model="selectedItem"
+            :placeholder="placeholder"
+            :icon="icon"
+  >
+    <option v-for="option in options"
+            :value="option.name"
+            :key="option.name"
     >
-      <option v-for="option in options"
-              :value="option.ID"
-              :key="option.ID"
-      >
-        {{option.Name}}
-<!--        <slot>именованный-->
-      </option>
-    </b-select>
+      {{ option.name }}
+    </option>
+  </b-select>
 </template>
 
 <script>
 export default {
   name: "VSelect",
-  //добавить 2 ключа, которые покажут что является value и label
   props: {
     value: {
       type: String,
@@ -23,25 +22,29 @@ export default {
     },
     options: {
       type: Array,
-      default (){
+      default() {
         return []
       }
     },
-    placeholder:{
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    icon: {
       type: String,
       default: ''
     }
   },
-  computed:{
-    selectedItem:{
-      get(){
+  computed: {
+    selectedItem: {
+      get() {
         return this.value
       },
-      set(value){
+      set(value) {
         this.$emit('input', value)
       }
     }
-  },
+  }
 }
 </script>
 
