@@ -11,6 +11,7 @@
                type="password"
                maxlength="10"
                v-model.trim="password"
+               password-reveal
     />
     <VButton submit="submit"
     >{{labelBtn}}

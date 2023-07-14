@@ -4,6 +4,7 @@
             :type="type"
             :maxlength="maxlength"
             v-model="defaultValue"
+            :passwordReveal="type === 'password'"
     />
   </VField>
 </template>
@@ -37,7 +38,11 @@ export default {
     maxlength: {
       type: [Number, String],
       default: ''
-    }
+    },
+    passwordReveal: {
+      type: Boolean,
+      default: false
+}
   },
   computed:{
     defaultValue:{

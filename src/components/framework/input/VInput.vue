@@ -4,6 +4,7 @@
              :placeholder="placeholder"
              :maxlength="maxlength"
              v-model="defaultValue"
+             :passwordReveal="passwordReveal"
     />
 </template>
 <script>
@@ -29,6 +30,10 @@ export default {
     type:{
       type: String,
       default: 'text'
+    },
+    passwordReveal: {
+      type: Boolean,
+      default: false
     }
   },
   computed:{

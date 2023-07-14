@@ -12,9 +12,9 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        name: 'home',
-        meta: {layout: 'main'},
-        component: () => import('../views/CountryDetailsPage')
+        name: 'login',
+        meta: {layout: 'auth'},
+        component: () => import('../views/AuthPage')
     },
     {
         path: '/login',
@@ -36,14 +36,14 @@ const routes = [
         component: () => import('../views/CountriesPage')
     },
     {
-        path: '/countries/country/:codeCountry',
+        path: '/country/:codeCountry',
         name: 'countriesDetails',
         meta: {layout: 'main', auth: true},
         props: true,
         component: () => import('../views/CountryDetailsPage')
     },
     {
-        path: '/countries/country/:codeCountry/university/:nameUniversity',
+        path: '/country/:codeCountry/university/:nameUniversity',
         name: 'university',
         meta: {layout: 'main', auth: true},
         props: true,
@@ -57,20 +57,32 @@ const router = new VueRouter({
 })
 //метод выполняется перед каждой сменой роутера
 router.beforeEach((to, from, next) => {
-    // const currentUser = store.getters.GET_USER_NAME
+    //Рабочий вариант
+    // const currentUser = store.getters.getUser
+    // const isLoginPage = from.name === 'login'
+    // const RegistryPage = from.name === 'registry'
+    // const requiredAuth = to.matched.some(record => record.meta.auth)
+    // if (requiredAuth && !currentUser) {
+    //     next({
+    //         path: '/login',
+    //         redirect: {name: 'login'}
+    //     })
+    // }
+    // else {
+    //     next()
+    // }
+    //=============================================
     const currentUser = store.getters.getUser
-    const isLoginPage = from.name === 'login'
-    const RegistryPage = from.name === 'registry'
+    console.log(1, currentUser)
     const requiredAuth = to.matched.some(record => record.meta.auth)
-    if (requiredAuth && !currentUser) {
+    console.log(2, requiredAuth)
+    if(requiredAuth && !currentUser){
         next({
             path: '/login',
             redirect: {name: 'login'}
         })
     }
-    else {
-        next()
-    }
+    else next()
     // if (requiredAuth && !currentUser && isLoginPage) {
     //     // Если пользователь не зарегистрирован, перенаправляем его на страницу регистрации
     //     next({

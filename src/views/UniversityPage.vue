@@ -14,6 +14,11 @@
 <script>
 export default {
   name: "UniversityPage",
+  methods:{
+    goBack(){
+      this.$router.go(-1)
+    }
+  },
   computed:{
     universityName () {
       return this.$route.params.props.name
