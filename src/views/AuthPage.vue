@@ -5,8 +5,12 @@
         <div class="box column is-6-tablet is-5-desktop">
           <AddUserForm labelBtn="Авторизоваться"
                        @addUser="addUser"
+                       :loginError="loginError"
           >
             <h3 class="title">Авторизация</h3>
+            <p v-if="loginError"
+               class="has-text-danger"
+            >Неправильное имя пользователя или пароль, попробуйте еще раз.</p>
           </AddUserForm>
           <p class="subtitle mt-2">
             Нет аккаунта? <span><router-link :to="{ name: 'registry'}">Зарегистрироваться</router-link></span>
@@ -19,6 +23,7 @@
 
 <script>
 import AddUserForm from "@/components/AddUserForm"
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "AuthPage",
@@ -27,25 +32,22 @@ export default {
   },
   data (){
     return {
+      loginError: false
     }
   },
   methods: {
+    ...mapActions(['loginUser']),
     addUser(user){
-    //     this.$store.dispatch('GET_USER_TO_VUEX', user)
-    //         .then(success=> {
-    //           console.log(success)
-    //           if (success) {
-    //             this.$router.push("/");
-    //           } else {
-    //             alert("Неверный логин или пароль!");
-    //           }
-    //           // success ? this.$router.push('countries') : alert("Неверный логин или пароль!")
-    //         })
-      this.$store.dispatch('loginUser', user)
-      this.$router.push('/countries');
-
+      const loginUser = this.getUsers.find(item=>item.login === user.login && item.password === user.password)
+      if(loginUser){
+        this.loginUser(user)
+        this.$router.push('/countries')
+        this.loginError = false
+      }
+      else this.loginError = true
     }
   },
+  computed: mapGetters(['getUsers'])
 }
 </script>
 

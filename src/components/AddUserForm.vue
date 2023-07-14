@@ -33,6 +33,10 @@ export default {
     labelBtn: {
       type: String,
       default: 'Ок'
+    },
+    loginError: {
+      type: Boolean,
+      default: false
     }
   },
   data (){
