@@ -1,7 +1,7 @@
 <template>
   <b-navbar>
     <template #brand>
-      <b-navbar-item tag="router-link" :to="{ path: '/' }">
+      <b-navbar-item tag="router-link" :to="{ path: '/countries' }">
         <router-link to="/countries">Страны мира</router-link>
       </b-navbar-item>
     </template>
@@ -14,12 +14,6 @@
                        placeholder="Country"
                        icon="earth"
         />
-<!--        <b-field>-->
-<!--          <b-select placeholder="Country" icon="earth">-->
-<!--            <option value="1">Option 1</option>-->
-<!--            <option value="2">Option 2</option>-->
-<!--          </b-select>-->
-<!--        </b-field>-->
       </b-navbar-item>
       <b-navbar-item tag="div">
         <VButton class="button is-light"

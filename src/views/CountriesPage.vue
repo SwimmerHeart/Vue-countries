@@ -39,6 +39,14 @@ export default {
     ...mapActions(['setCountriesName']),
     async getCountries() {
       this.countries = await getCountriesData()
+      const NameDisplay = this.countries.map(item=>{
+                    return {
+                      name: item.name.common,
+                      cca3: item.cca3,
+                      currencies: item.currencies
+                    }
+                  })
+                  this.setCountriesName(NameDisplay)
       return this.countries
     },
     // РАБОЧИЙ ВАРИАНТ 1

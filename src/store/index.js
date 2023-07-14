@@ -77,9 +77,17 @@ const store = new Vuex.Store({
         getCountriesSelectName (state) {
             return state.countriesName
         },
+        getInfoCodeCurrency (state) {
+            const selectCountry = state.countriesName.find(item=>item.name === state.user?.country)
+            if(selectCountry) {
+                const selectCurrency =  Object.values(selectCountry)[2]
+                return Object.keys(selectCurrency)[0]
+            }
+            else return ''
+        },
         getCountryUser (state){
             return state.user.country
-        }
+        },
     },
     mutations: {
         register(state, user) {

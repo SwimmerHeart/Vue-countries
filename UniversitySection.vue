@@ -24,10 +24,10 @@ export default {
   mounted() {
     const getUniversities = async () => {
       try {
-        console.log('this.country', this.country)
+        // console.log('this.country', this.country)
         this.universities = await getUniversitiesData(this.country)
         if(!this.universities.length) this.universities = await getUniversitiesData(this.nameOfficial)
-        console.log('univers', this.universities)
+        // console.log('univers', this.universities)
       } catch (error) {
         console.log(error)
       }

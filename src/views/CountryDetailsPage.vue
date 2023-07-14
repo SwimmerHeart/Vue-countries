@@ -22,7 +22,7 @@
     </div>
     <div class="columns">
       <div class="column is-4">
-        <CurrencyBlock :CurrencyCodeTo="CurrencyCodeTo"/>
+        <CurrencyBlock :currencyCodeTo="currencyCodeTo"/>
       </div>
       <div class="column">
         <div class="box">
@@ -38,7 +38,8 @@
 <script>
 import UniversitySection from "../../UniversitySection"
 import CurrencyBlock from "@/components/CurrencyBlock"
-import {getCountriesData} from "@/api/countries/api";
+import {getCountriesData} from "@/api/countries/api"
+import {mapGetters} from "vuex";
 
 export default {
   name: "CountryDetailsPage",
@@ -51,6 +52,9 @@ export default {
       try {
         const data = await getCountriesData(this.$route.params.props)
         this.countryData = data[0]
+        // this.currencyCodeTo = this.countryData?.currencies
+        // console.log(isCurrencies)
+        // if(isCurrencies) this.currencyCodeTo =  Object.keys(this.countryData.currencies)[0]
         // snackbarInfo('Данные о стране загружены')
       } catch (error) {
         // snackbarError(error)
@@ -62,10 +66,12 @@ export default {
   data() {
     return {
       countryData: {},
-      country: ''
+      country: '',
+      // currencyCodeTo: ''
     }
   },
   computed: {
+    ...mapGetters(['getCountriesSelectName']),
     flag () {
       return this.countryData.flags?.png
     },
@@ -99,14 +105,20 @@ export default {
     },
     bordersCountries() {
       const isBorders = this.countryData.borders
-      if(isBorders) return this.countryData.borders
+      if(isBorders) {
+          return this.getCountriesSelectName.reduce((acc, item)=>{
+            if(this.countryData.borders.includes(item.cca3))  acc+=`${item.name}, `
+            return acc
+      },'')
+      }
       return 'У страны нет сухопутных границ'
     },
     nameOfficial() {
       return this.countryData?.name?.official
     },
-    CurrencyCodeTo (){
-      const isCurrencies = this.countryData.currency
+    currencyCodeTo (){
+      const isCurrencies = this.countryData.currencies
+      console.log(isCurrencies)
       if(isCurrencies) return Object.keys(this.countryData.currencies)[0]
       return ''
     }

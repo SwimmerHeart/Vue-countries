@@ -17,17 +17,18 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
             '/sbr/api': {
-                // target: 'https://www.cbr-xml-daily.ru',
-                //исп.env переменной(указываем в .env)
                 target: process.env.API_CBR,
-                //проверка сертификатов
-                // secure: false,
-                // rejectUnauthorized: false,
-                //меняем имена cookie
-                // cookieDomainRewrite: { "cbr-xml-daily.ru": "localhost" },
-                // withCredentials: true,
-                //префикс /api будет удален из запроса
                 pathRewrite: { '^/sbr/api': '' },
+                changeOrigin: true
+            },
+            '/countries/api': {
+                target: process.env.API_CBR,
+                pathRewrite: { '^/countries/api': '' },
+                changeOrigin: true
+            },
+            '/universities/api': {
+                target: process.env.API_CBR,
+                pathRewrite: { '^/universities/api': '' },
                 changeOrigin: true
             },
         }
