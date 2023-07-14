@@ -8,6 +8,9 @@
               @addUser="addUser"
           >
             <h3 class="title">Регистрация</h3>
+            <p v-if="isAuth"
+               class="has-text-danger"
+            >Данный логин уже есть в системе</p>
           </AddUserForm>
           <p class="subtitle mt-2">
             Уже есть аккаунт? <span><router-link :to="{ name: 'login'}">Войти</router-link></span>
@@ -20,6 +23,7 @@
 
 <script>
 import AddUserForm from "@/components/AddUserForm"
+import {mapActions, mapGetters} from "vuex";
 export default {
   name: "RegistryPage",
   components: {
@@ -27,17 +31,25 @@ export default {
   },
   data (){
     return {
-
+      isAuth: false
     }
   },
   methods: {
+    ...mapActions(['registerUser']),
     addUser(user){
-      // this.$store.dispatch('ADD_USER_TO_VUEX', user)
-      // this.$router.push('/countries')
-      this.$store.dispatch('registerUser', user)
-      this.$router.push('/countries');
+      const loginUser = this.getUsers.some(item=>item.login === user.login)
+      if(!loginUser){
+        this.registerUser(user)
+        this.$router.push('/countries')
+        this.isAuth = false
+      }
+      else this.isAuth = true
+
+      // this.$store.dispatch('registerUser', user)
+      // this.$router.push('/countries');
     }
   },
+  computed: mapGetters(['getUsers'])
 }
 </script>
 

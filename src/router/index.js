@@ -1,11 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from '@/store'
-import HomePage from "@/views/CountriesPage"
-import SignUp from "@/views/RegistryPage"
-import AuthPage from "@/views/AuthPage";
-import AuthLayout from "@/layouts/AuthLayout"
-
 
 Vue.use(VueRouter)
 
@@ -55,27 +50,10 @@ const router = new VueRouter({
     mode: 'history',
     routes
 })
-//метод выполняется перед каждой сменой роутера
+
 router.beforeEach((to, from, next) => {
-    //Рабочий вариант
-    // const currentUser = store.getters.getUser
-    // const isLoginPage = from.name === 'login'
-    // const RegistryPage = from.name === 'registry'
-    // const requiredAuth = to.matched.some(record => record.meta.auth)
-    // if (requiredAuth && !currentUser) {
-    //     next({
-    //         path: '/login',
-    //         redirect: {name: 'login'}
-    //     })
-    // }
-    // else {
-    //     next()
-    // }
-    //=============================================
     const currentUser = store.getters.getUser
-    console.log(1, currentUser)
     const requiredAuth = to.matched.some(record => record.meta.auth)
-    console.log(2, requiredAuth)
     if(requiredAuth && !currentUser){
         next({
             path: '/login',
@@ -83,22 +61,6 @@ router.beforeEach((to, from, next) => {
         })
     }
     else next()
-    // if (requiredAuth && !currentUser && isLoginPage) {
-    //     // Если пользователь не зарегистрирован, перенаправляем его на страницу регистрации
-    //     next({
-    //         path: '/registry',
-    //         redirect: { name: 'registry' }
-    //     })
-    // } else if (requiredAuth && !currentUser && RegistryPage) {
-    //     // Если неаутентифицированный пользователь пытается получить доступ к защищенному маршруту,
-    //     // перенаправляем его на страницу входа в систему
-    //     next({
-    //         path: '/login',
-    //         redirect: { name: 'login' }
-    //     });
-    // } else {
-    //     next();
-    // }
 })
 
 export default router

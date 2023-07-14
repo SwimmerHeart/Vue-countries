@@ -33,10 +33,6 @@ export default {
     labelBtn: {
       type: String,
       default: 'Ок'
-    },
-    loginError: {
-      type: Boolean,
-      default: false
     }
   },
   data (){
@@ -49,8 +45,8 @@ export default {
     onSubmit(){
       if(this.login && this.password){
         const user = {
-          login: this.login,
-          password: this.password
+          login: this.login.toLowerCase(),
+          password: this.password.toLowerCase()
         }
         this.$emit('addUser', user)
         this.login = ''

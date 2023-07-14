@@ -5,10 +5,9 @@
         <div class="box column is-6-tablet is-5-desktop">
           <AddUserForm labelBtn="Авторизоваться"
                        @addUser="addUser"
-                       :loginError="loginError"
           >
             <h3 class="title">Авторизация</h3>
-            <p v-if="loginError"
+            <p v-if="isAuth"
                class="has-text-danger"
             >Неправильное имя пользователя или пароль, попробуйте еще раз.</p>
           </AddUserForm>
@@ -32,7 +31,7 @@ export default {
   },
   data (){
     return {
-      loginError: false
+      isAuth: false
     }
   },
   methods: {
@@ -42,9 +41,9 @@ export default {
       if(loginUser){
         this.loginUser(user)
         this.$router.push('/countries')
-        this.loginError = false
+        this.isAuth = false
       }
-      else this.loginError = true
+      else this.isAuth = true
     }
   },
   computed: mapGetters(['getUsers'])
