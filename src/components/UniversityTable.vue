@@ -19,7 +19,7 @@
         :selected.sync="selected"
         :per-page="perPage"
         @dblclick="clicked"
-        class="is-clickable"
+        @click="goToUniversityInfo"
     >
     </b-table>
   </section>
@@ -68,7 +68,15 @@ export default {
     clicked(event) {
       console.log(event);
       this.$router.push(`/countries/${event.country}/university/${event.name}`)
-    }
+    },
+    goToUniversityInfo(university) {
+      console.log(university)
+      if (university) {
+        console.log(this.$route)
+        this.$router.push({ name: 'university',
+          params: { nameUniversity: university.name, props: university}})
+      }
+    },
   },
   computed:{
     isEmpty (){

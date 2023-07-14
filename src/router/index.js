@@ -43,9 +43,10 @@ const routes = [
         component: () => import('../views/CountryDetailsPage')
     },
     {
-        path: '/country/:codeCountry/university/:nameUniversity',
+        path: '/countries/country/:codeCountry/university/:nameUniversity',
         name: 'university',
         meta: {layout: 'main', auth: true},
+        props: true,
         component: () => import('../views/UniversityPage')
     }
 ]
