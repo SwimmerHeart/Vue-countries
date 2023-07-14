@@ -44,9 +44,6 @@ export default {
         this.isAuth = false
       }
       else this.isAuth = true
-
-      // this.$store.dispatch('registerUser', user)
-      // this.$router.push('/countries');
     }
   },
   computed: mapGetters(['getUsers'])

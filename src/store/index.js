@@ -68,53 +68,46 @@ const store = new Vuex.Store({
         countriesName: []
     },
     getters: {
-        getUser (state) {
+        getUser(state) {
             return state.user
         },
-        getUsers (state) {
+        getUsers(state) {
             return state.users
         },
-        getUserName (state) {
+        getUserName(state) {
             return state.user ? state.user.name : ''
         },
-        getCountriesSelectName (state) {
+        getCountriesSelectName(state) {
             return state.countriesName
         },
-        getInfoCodeCurrency (state) {
-            const selectCountry = state.countriesName.find(item=>item.name === state.user?.country)
-            if(selectCountry) {
-                const selectCurrency =  Object.values(selectCountry)[2]
+        getInfoCodeCurrency(state) {
+            const selectCountry = state.countriesName.find(item => item.name === state.user?.country)
+            if (selectCountry) {
+                const selectCurrency = Object.values(selectCountry)[2]
                 return Object.keys(selectCurrency)[0]
-            }
-            else return ''
+            } else return ''
         },
-        getCountryUser (state){
+        getCountryUser(state) {
             return state.user.country
         },
     },
     mutations: {
         register(state, user) {
-            if (!state.users.some(item => item.login === user.login)) {
-                state.users.push(user)
-                localStorage.setItem('users', JSON.stringify(state.users))
-                state.user = {
-                    name: user.login,
-                    country: undefined
-                };
-                localStorage.setItem('user', JSON.stringify(state.user))
+            state.users.push(user)
+            localStorage.setItem('users', JSON.stringify(state.users))
+            state.user = {
+                name: user.login,
+                country: undefined
             }
+            localStorage.setItem('user', JSON.stringify(state.user))
+
         },
         login(state, user) {
-            const userStorage = state.users.find(item => item.login === user.login && item.password === user.password);
-            if (userStorage) {
-                state.user = {
-                    name: userStorage.login,
-                    country: userStorage.country
-                };
-                localStorage.setItem('user', JSON.stringify(state.user))
-                return true;
+            state.user = {
+                name: user.login,
+                country: user.country
             }
-            return false;
+            localStorage.setItem('user', JSON.stringify(state.user))
         },
         logout(state) {
             state.user = undefined;
@@ -124,7 +117,7 @@ const store = new Vuex.Store({
             state.user.country = country
             localStorage.setItem('user', JSON.stringify(state.user))
         },
-        setCountriesSelectName(state, countries){
+        setCountriesSelectName(state, countries) {
             state.countriesName = countries
         }
     },
@@ -133,7 +126,7 @@ const store = new Vuex.Store({
             commit('register', user)
         },
         loginUser({commit}, user) {
-          commit('login', user)
+            commit('login', user)
         },
         logoutUser({commit}) {
             commit('logout')
