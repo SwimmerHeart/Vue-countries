@@ -6,7 +6,7 @@
 
 <script>
 import UniversityTable from "@/components/UniversityTable"
-import {getUniversitiesData} from "@/api/universities/api"
+import {getUniversitiesData, getUniversitiesDataByName} from "@/api/universities/api"
 
 export default {
   name: "UniversitySection",
@@ -25,8 +25,8 @@ export default {
     const getUniversities = async () => {
       try {
         // console.log('this.country', this.country)
-        this.universities = await getUniversitiesData(this.country)
-        if(!this.universities.length) this.universities = await getUniversitiesData(this.nameOfficial)
+        this.universities = await getUniversitiesDataByName(this.country)
+        if(!this.universities.length) this.universities = await getUniversitiesDataByName(this.nameOfficial)
         // console.log('univers', this.universities)
       } catch (error) {
         console.log(error)

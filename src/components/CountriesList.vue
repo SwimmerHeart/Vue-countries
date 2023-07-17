@@ -5,7 +5,7 @@
         :key="index"
     >
       <router-link :to="{ name: 'countriesDetails',
-      params: { codeCountry: country.cca3, props: country.name.common}}"
+      params: { codeCountry: country.name.common, props: country.name.common}}"
                    class="card m-5 is-clickable"
       >
         <div class="card-header card-image">

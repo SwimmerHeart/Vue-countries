@@ -4,10 +4,10 @@
             :icon="icon"
   >
     <option v-for="option in options"
-            :value="option.name"
-            :key="option.name"
+            :value="option"
+            :key="option"
     >
-      {{ option.name }}
+      {{ option }}
     </option>
   </b-select>
 </template>

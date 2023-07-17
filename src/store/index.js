@@ -4,64 +4,6 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-    // state: {
-    //     users: [],
-    //     user: undefined
-    // },
-    // getters: {
-    //     userNameByLogin: (state) => (login) =>
-    //             state.users.find((user) => user.login === login)?.login,
-    //
-    //     GET_USER(state) {
-    //         return state.user
-    //     },
-    //     GET_USER_NAME(state) {
-    //         return state.user?.login
-    //     }
-    // },
-    // mutations: {
-    //     REGISTRY(state, user) {
-    //         if (!state.users.some(item => item.login === user.login)) {
-    //             state.users.push(user);
-    //             const userList = state.users.map(item=>{
-    //                 return {
-    //                     name: item.login,
-    //                     country: ''
-    //                 }
-    //             })
-    //             localStorage.setItem('user', JSON.stringify(userList))
-    //             state.user = user
-    //         }
-    //     },
-    //     LOGIN(state, user) {
-    //         //загружаем пользователей из localStorage
-    //         const usersStorage = JSON.parse(localStorage.getItem('user')) || []
-    //         //находим нужную запись при авторизации
-    //         const userStorage = usersStorage.find(item=>item.name === user.login)
-    //         if(userStorage) {
-    //             //если запись есть проверяем совпадают ли данные в store
-    //             const currentUser = state.users
-    //                 .find(item => item.name === user.login && item.password === user.password)
-    //             currentUser ? state.user = user : state.user = undefined
-    //             return true
-    //         }
-    //         else return false
-    //     },
-    //     LOGOUT(state) {
-    //         state.user = undefined
-    //     },
-    // },
-    // actions: {
-    //     ADD_USER_TO_VUEX({commit}, user) {
-    //         commit('REGISTRY', user)
-    //     },
-    //     GET_USER_TO_VUEX ({commit}, user) {
-    //         commit('LOGIN', user)
-    //     },
-    //     DELETE_USER_TO_VUEX ({commit}) {
-    //         commit('LOGOUT')
-    //     },
-    // }
     state: {
         users: JSON.parse(localStorage.getItem('users')) || [],
         user: JSON.parse(localStorage.getItem('user')),
@@ -78,7 +20,7 @@ const store = new Vuex.Store({
             return state.user ? state.user.name : ''
         },
         getCountriesSelectName(state) {
-            return state.countriesName
+            return state.countriesName.map(item=>item.name).sort()
         },
         getInfoCodeCurrency(state) {
             const selectCountry = state.countriesName.find(item => item.name === state.user?.country)
@@ -102,16 +44,24 @@ const store = new Vuex.Store({
             localStorage.setItem('user', JSON.stringify(state.user))
 
         },
-        login(state, user) {
-            state.user = {
+        setCurrentUser(state, user) {
+            // const findUser = JSON.parse(localStorage.getItem('users')).find(item=>i.name===user.login)
+            // if(findUser.name === user.login) {
+            //     state.user = {
+            //         name: user.login,
+            //         country: JSON.parse(localStorage.getItem('user')).country
+            //     }
+            // }
+            // else
+                state.user = {
                 name: user.login,
                 country: user.country
             }
+
             localStorage.setItem('user', JSON.stringify(state.user))
         },
         logout(state) {
-            state.user = undefined;
-            localStorage.removeItem('user');
+            state.user = undefined
         },
         setCountry(state, country) {
             state.user.country = country
@@ -126,7 +76,7 @@ const store = new Vuex.Store({
             commit('register', user)
         },
         loginUser({commit}, user) {
-            commit('login', user)
+            commit('setCurrentUser', user)
         },
         logoutUser({commit}) {
             commit('logout')

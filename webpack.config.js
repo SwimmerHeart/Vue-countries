@@ -13,7 +13,10 @@ module.exports = {
     devServer: {
         open: true,
         port: 8086,
-        static: './dist',
+        static: {
+            directory: path.resolve(__dirname, 'dist'),
+            publicPath: '/',
+        },
         historyApiFallback: true,
         proxy: {
             '/sbr/api': {
@@ -22,12 +25,12 @@ module.exports = {
                 changeOrigin: true
             },
             '/countries/api': {
-                target: process.env.API_CBR,
+                target: process.env.API_COUNTRIES,
                 pathRewrite: { '^/countries/api': '' },
                 changeOrigin: true
             },
             '/universities/api': {
-                target: process.env.API_CBR,
+                target: process.env.API_UNIVERSITIES,
                 pathRewrite: { '^/universities/api': '' },
                 changeOrigin: true
             },
@@ -99,6 +102,7 @@ module.exports = {
             title: 'Contries-Development',
             template: path.resolve(__dirname, "public", "index.html"),
             favicon: "./public/globe.png",
+            publicPath: '/'
         }),
         new VueLoaderPlugin(),
     ],

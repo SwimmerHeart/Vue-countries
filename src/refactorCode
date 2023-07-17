@@ -1,0 +1,12 @@
+1.Изменил настройку router.js.Для страниц требующих авторизации не требуется прописывать auth: true
+Добавлена auth: false для маршрутов login и registry и выполняется проверка на значение false
+
+2.Vuex: оставить только user, данные о users получать сразу из localstorage
+ - Функция регистрации сразу обращается  в localstorage
+ -
+
+3. Переименовать компонент выбора страны, в mounted создать запрос к api для отображения списка стран
+в HeaderMenu перестаем передавать options = NameSelection :options="getCountriesSelectName"
+Решение: переименовал в SelectCountryName, запрос к апи отправил, сохранил в data и отправил в VSelect,
+запись страны в user реализовал в HeaderMenu
+4. Разбил функцию getCountries на 2

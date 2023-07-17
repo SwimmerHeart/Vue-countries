@@ -1,12 +1,9 @@
 import {handlerError, handlerResponse, handlerToJSON} from "@/api/universities/handlers";
 
 export function query(url, config, {handlers} = {}) {
-    console.warn('handlers', handlers)
-    // проверять массив или просто объект в handlers
-    // что если мы передаем handlers, но не передаем catch
+    // console.warn('handlers', handlers)
 
     let _fetch = fetch(url, config).then(handlerResponse)
-    // флаг для проверки того, нужно ли прервать выполнение цепочки промисов после текущей итерации цикла
     let shouldBreak = false;
     if (handlers?.then) {
         if (Array.isArray(handlers.catch)) {
@@ -42,7 +39,7 @@ export function query(url, config, {handlers} = {}) {
         _fetch = _fetch.catch(handlerError)
     }
 
-    console.warn('_fetch', _fetch)
+    // console.warn('_fetch', _fetch)
     return _fetch
 }
 

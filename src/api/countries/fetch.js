@@ -48,6 +48,7 @@ export function query(url, config, {handlers} = {}) {
 
 export function GET(url, params, options) {
     const paramsString = new URLSearchParams(params).toString()
+    console.log('paramsString', paramsString)
     return query(`${url}${paramsString}`, undefined, options)
 }
 

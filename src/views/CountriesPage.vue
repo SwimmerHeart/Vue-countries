@@ -15,7 +15,7 @@
 <script>
 import SearchInput from "@/components/input/SearchInput"
 import CountriesList from "@/components/CountriesList"
-import {getCountriesData} from "@/api/countries/api"
+import {getCountriesDataAllByName} from "@/api/countries/api"
 import {mapActions} from "vuex"
 import InfiniteLoading from 'vue-infinite-loading'
 
@@ -37,8 +37,8 @@ export default {
   },
   methods: {
     ...mapActions(['setCountriesName']),
-    async getCountries() {
-      this.countries = await getCountriesData()
+    async getCountriesDataAllByName() {
+      this.countries = await getCountriesDataAllByName()
       const NameDisplay = this.countries.map(item=>{
                     return {
                       name: item.name.common,
@@ -74,7 +74,7 @@ export default {
     //   },
     async loadMore($state) {
       try {
-        await this.getCountries()
+        await this.getCountriesDataAllByName()
         const remainingCountries = this.countries.slice(this.currentIndex, this.currentIndex + this.itemsPerPage)
         this.visibleCountries.push(...remainingCountries)
         this.currentIndex += this.itemsPerPage

@@ -38,19 +38,19 @@
 <script>
 import UniversitySection from "../../UniversitySection"
 import CurrencyBlock from "@/components/CurrencyBlock"
-import {getCountriesData} from "@/api/countries/api"
+import {getCountriesDataByName} from "@/api/countries/api"
 import {mapGetters} from "vuex";
 
 export default {
   name: "CountryDetailsPage",
   components:{UniversitySection, CurrencyBlock},
   created() {
-    this.country = this.$route.params.props
+    this.country = this.$route.params.codeCountry
   },
   mounted() {
     const getCountries = async () => {
       try {
-        const data = await getCountriesData(this.$route.params.props)
+        const data = await getCountriesDataByName(this.$route.params.codeCountry)
         this.countryData = data[0]
         // this.currencyCodeTo = this.countryData?.currencies
         // console.log(isCurrencies)
