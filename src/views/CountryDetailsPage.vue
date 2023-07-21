@@ -26,7 +26,8 @@
       </div>
       <div class="column">
         <div class="box">
-          <UniversitySection :country="country"
+          <UniversitySection v-if="countryData && nameOfficial"
+                             :country="country"
                              :nameOfficial="nameOfficial"
           />
         </div>
@@ -38,8 +39,8 @@
 <script>
 import UniversitySection from "../../UniversitySection"
 import CurrencyBlock from "@/components/CurrencyBlock"
-import {getCountriesDataByName} from "@/api/countries/api"
-import {mapGetters} from "vuex";
+import {getCountriesDataByName, getCountriesDataAll} from "@/api/countries"
+import {mapGetters} from "vuex"
 
 export default {
   name: "CountryDetailsPage",
@@ -48,27 +49,41 @@ export default {
     this.country = this.$route.params.codeCountry
   },
   mounted() {
-    const getCountries = async () => {
-      try {
-        const data = await getCountriesDataByName(this.$route.params.codeCountry)
-        this.countryData = data[0]
-        // this.currencyCodeTo = this.countryData?.currencies
-        // console.log(isCurrencies)
-        // if(isCurrencies) this.currencyCodeTo =  Object.keys(this.countryData.currencies)[0]
-        // snackbarInfo('Данные о стране загружены')
-      } catch (error) {
-        // snackbarError(error)
-        console.log(error)
-      }
-    }
-    getCountries()
+    this.getCountriesByName()
+    this.getCountries()
   },
   data() {
     return {
       countryData: {},
       country: '',
-      // currencyCodeTo: ''
+      countriesNames: [],
+      nameOfficial: ''
     }
+  },
+  methods:{
+    async getCountriesByName() {
+      try {
+        const data = await getCountriesDataByName(this.$route.params.codeCountry)
+        this.countryData = data[0]
+        this.nameOfficial = this.countryData.name.official
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getCountries() {
+      try {
+        const data = await getCountriesDataAll()
+        this.countriesNames = data.map(item=>{
+          return {
+            shortName: item.cca3,
+            fullName: item.name?.common
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
   },
   computed: {
     ...mapGetters(['getCountriesSelectName']),
@@ -78,7 +93,7 @@ export default {
     countryName (){
       const isName = this.countryData.name
       if(isName) return this.countryData.name.official
-        return ''
+       return ''
     },
     capital (){
       return this.countryData?.capital?.[0]
@@ -106,19 +121,15 @@ export default {
     bordersCountries() {
       const isBorders = this.countryData.borders
       if(isBorders) {
-          return this.getCountriesSelectName.reduce((acc, item)=>{
-            if(this.countryData.borders.includes(item.cca3))  acc+=`${item.name}, `
+          return this.countriesNames.reduce((acc, item)=>{
+            if(this.countryData.borders.includes(item.shortName))  acc+=`${item.fullName}, `
             return acc
       },'')
       }
       return 'У страны нет сухопутных границ'
     },
-    nameOfficial() {
-      return this.countryData?.name?.official
-    },
     currencyCodeTo (){
       const isCurrencies = this.countryData.currencies
-      console.log(isCurrencies)
       if(isCurrencies) return Object.keys(this.countryData.currencies)[0]
       return ''
     }

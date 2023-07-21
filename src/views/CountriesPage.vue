@@ -4,19 +4,19 @@
       <div class="column is-12-mobile is-6-tablet is-3-desktop">
         <SearchInput placeholder="Поиск по странам..."
                      v-model="country"
+                     @input="onChangeFilter"
         />
       </div>
     </div>
-    <CountriesList :countries="filteredCountries"/>
-    <infinite-loading @infinite="loadMore" ref="infiniteLoading" spinner="bubbles"></infinite-loading>
+    <CountriesList :countries="countries"/>
+    <infinite-loading @infinite="loadMore"  force-use-infinite-wrapper ref="infiniteLoading" :identifier="infiniteId" spinner="bubbles"></infinite-loading>
   </div>
 </template>
 
 <script>
 import SearchInput from "@/components/input/SearchInput"
 import CountriesList from "@/components/CountriesList"
-import {getCountriesDataAllByName} from "@/api/countries/api"
-import {mapActions} from "vuex"
+import {getCountriesArrayLength, getCountriesDataAll, getCountriesDataByName} from "@/api/countries"
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
@@ -31,56 +31,29 @@ export default {
       countries: [],
       country: '',
       itemsPerPage: 12,
-      currentIndex: 0,
-      visibleCountries: []
+      currentPage: 1,
+      infiniteId: 0
     }
   },
   methods: {
-    ...mapActions(['setCountriesName']),
-    async getCountriesDataAllByName() {
-      this.countries = await getCountriesDataAllByName()
-      const NameDisplay = this.countries.map(item=>{
-                    return {
-                      name: item.name.common,
-                      cca3: item.cca3,
-                      currencies: item.currencies
-                    }
-                  })
-                  this.setCountriesName(NameDisplay)
-      return this.countries
+    async getCountries(page, count, name) {
+      if(name) return await getCountriesDataByName(name, {page, count})
+      return await getCountriesDataAll({page, count, name})
     },
-    // РАБОЧИЙ ВАРИАНТ 1
-    // async loadMore($state) {
-    //     try {
-    //       const data = await getCountriesData()
-    //       const NameDisplay = data.map(item=>{
-    //         return {
-    //           name: item.name.common
-    //         }
-    //       })
-    //       this.setCountriesName(NameDisplay)
-    //       //получаем порцию стран и добавляем в массив стран
-    //       const remainingCountries = data.slice(this.currentIndex, this.currentIndex + this.itemsPerPage)
-    //       this.countries.push(...remainingCountries)
-    //       console.log(this.countries)
-    //       //переходим на следующую страницу
-    //       this.currentIndex += this.itemsPerPage
-    //       $state.loaded()
-    //       //если текущий индекс элемента больше длины массива стран => выходим
-    //       if (this.currentIndex >= data.length) $state.complete()
-    //     } catch (error) {
-    //       console.log(error)
-    //     }
-    //   },
+    onChangeFilter () {
+      this.currentPage = 1
+      this.infiniteId += 1
+      this.countries = []
+    },
     async loadMore($state) {
       try {
-        await this.getCountriesDataAllByName()
-        const remainingCountries = this.countries.slice(this.currentIndex, this.currentIndex + this.itemsPerPage)
-        this.visibleCountries.push(...remainingCountries)
-        this.currentIndex += this.itemsPerPage
+        if (this.currentPage === 1) this.totalCount = await getCountriesArrayLength()
+        const countries = await this.getCountries(this.currentPage, this.itemsPerPage, this.country)
+        this.countries = [...this.countries, ...countries]
+        this.currentPage += 1
         if ($state) {
           $state.loaded()
-          if (this.currentIndex >= this.countries.length) {
+          if (this.currentPage * this.itemsPerPage >= this.totalCount) {
             $state.complete()
           }
         }
@@ -88,15 +61,6 @@ export default {
         console.log(error)
       }
     },
-  },
-  computed: {
-    filteredCountries() {
-      if (this.country) {
-        return this.countries.filter(item => item.name.common.toLowerCase().includes(this.country.toLowerCase()))
-      } else {
-        return this.visibleCountries
-      }
-    }
   }
 }
 </script>

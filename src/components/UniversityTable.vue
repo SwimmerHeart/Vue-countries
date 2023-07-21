@@ -1,7 +1,7 @@
 <template>
   <section>
     <b-field grouped>
-      <b-select v-model="perPage">
+      <b-select v-model="perPage" @input="changeCount">
         <option value="10">10 на странице</option>
         <option value="30">30 на странице</option>
         <option value="100">100 на странице</option>
@@ -15,9 +15,14 @@
         focusable
         bordered
         paginated
+        backend-pagination
         pagination-position="top"
+        :loading="loading"
         :selected.sync="selected"
         :per-page="perPage"
+        :current-page.sync="currentPage"
+        :total="totalCount"
+        @page-change="changePage"
         @dblclick="clicked"
         @click="goToUniversityInfo"
     >
@@ -26,15 +31,22 @@
 </template>
 
 <script>
+import {getUniversitiesCountByName, getUniversitiesDataAllByName, getUniversitiesDataByName} from "@/api/universities";
+
 export default {
   name: "UniversityTable",
   props:{
-    universities: {
-      type: Array,
-      default(){
-        return []
-      }
+    country: {
+      type: String,
+      default: ''
+    },
+    nameOfficial: {
+      type: String,
+      default: ''
     }
+  },
+  mounted() {
+    this.getUniversities()
   },
   data(){
     return{
@@ -58,19 +70,44 @@ export default {
           centered: true
         },
       ],
+      universities: [],
       selected: null,
       currentPage: 1,
       perPage: 30,
-
+      totalCount: 0,
+      loading: false
     }
   },
   methods:{
+    async getUniversities(){
+      try {
+        this.loading = true
+        console.log(this.country, this.nameOfficial)
+          this.totalCount = await getUniversitiesCountByName({
+            shortName: this.country,
+            longName: this.nameOfficial
+          })
+          this.universities = await getUniversitiesDataAllByName(this.country, this.nameOfficial,
+              {page: this.currentPage, count: this.perPage})
+        this.loading = false
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    changePage(page) {
+      this.currentPage = page
+      this.getUniversities()
+    },
+    changeCount(count) {
+      this.perPage = count
+      this.currentPage = 1
+      this.getUniversities()
+    },
     clicked(event) {
       console.log(event);
       this.$router.push(`/countries/${event.country}/university/${event.name}`)
     },
     goToUniversityInfo(university) {
-      console.log(university)
       if (university) {
         console.log(this.$route)
         this.$router.push({ name: 'university',

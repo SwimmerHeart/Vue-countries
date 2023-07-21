@@ -9,7 +9,8 @@
 
 <script>
 import VSelect from "@/components/framework/select/VSelect"
-import {getCountriesDataAllByName} from "@/api/countries/api"
+import {getCountriesDataAll} from "@/api/countries"
+import {mapGetters} from "vuex";
 
 export default {
   name: "USelect",
@@ -24,6 +25,10 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    value: {
+      type: String,
+      default: ''
     }
   },
   mounted() {
@@ -36,7 +41,7 @@ export default {
   },
   methods: {
     async getCountries() {
-      const dataCountries = await getCountriesDataAllByName('name')
+      const dataCountries = await getCountriesDataAll({fields: 'name'})
       dataCountries.forEach(item => {
         this.countriesName.push(item.name.common)
       })
@@ -44,6 +49,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getCountryUser']),
     selectedItem: {
       get() {
         return this.value

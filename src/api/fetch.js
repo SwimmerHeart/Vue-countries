@@ -1,13 +1,9 @@
-import {handlerError, handlerResponse, handlerToJSON} from "@/api/countries/handlers";
+import {handlerError, handlerResponse, handlerToJSON} from "@/api/handlers";
 
 export function query(url, config, {handlers} = {}) {
     // console.warn('handlers', handlers)
-    // проверять массив или просто объект в handlers
-    // что если мы передаем handlers, но не передаем catch
-
     let _fetch = fetch(url, config).then(handlerResponse)
-    // флаг для проверки того, нужно ли прервать выполнение цепочки промисов после текущей итерации цикла
-    let shouldBreak = false;
+       let shouldBreak = false;
     if (handlers?.then) {
         if (Array.isArray(handlers.catch)) {
             for (let func of handlers.catch) {
@@ -48,7 +44,6 @@ export function query(url, config, {handlers} = {}) {
 
 export function GET(url, params, options) {
     const paramsString = new URLSearchParams(params).toString()
-    console.log('paramsString', paramsString)
     return query(`${url}${paramsString}`, undefined, options)
 }
 

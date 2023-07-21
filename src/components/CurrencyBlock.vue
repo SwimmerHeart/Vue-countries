@@ -1,12 +1,13 @@
 <template>
   <div class="box subtitle">
-    Курс Вашей валюты {{getInfoCodeCurrency}} по отношению к {{ this.currencyCodeTo }} равен 1 : {{exchangeRate}}
+    Курс Вашей валюты {{currencyCodeFrom}} по отношению к {{ currencyCodeTo }} равен 1 : {{exchangeRate}}
   </div>
 </template>
 
 <script>
-import {getExchangeRate} from "@/api/currencies/api";
+import {getExchangeRate} from "@/api/currencies";
 import {mapGetters} from "vuex";
+import {getCountriesDataByName} from "@/api/countries";
 
 export default {
   name: "CurrencyBlock",
@@ -17,31 +18,43 @@ export default {
     }
   },
   created() {
-    const getCurrencies = async () => {
+    this.getCurrencies()
+  },
+  data() {
+    return {
+      valutes: {},
+      amount: 1,
+      currencyCodeFrom: ''
+    }
+  },
+  methods:{
+    async getCurrencies(){
       try {
         const exchangeData = await getExchangeRate()
         this.valutes = exchangeData.Valute
       } catch (error) {
         console.log(error)
       }
-    }
-    getCurrencies()
-  },
-  data() {
-    return {
-      valutes: {},
-      amount: 1,
-    }
+    },
+    async getCountries(){
+      try {
+        const data = await getCountriesDataByName(this.getCountryUser)
+        this.currencyCodeFrom = Object.keys(data[0].currencies)[0]
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
   computed: {
-    ...mapGetters(['getCountriesSelectName','getCountryUser', 'getInfoCodeCurrency']),
+    ...mapGetters(['getCountryUser']),
     exchangeRate() {
-      if (!this.getInfoCodeCurrency || !this.currencyCodeTo) return ''
+      this.getCountries()
+      if (!this.currencyCodeFrom || !this.currencyCodeTo) return ''
       const baseValue = {
         Value: 1,
         Nominal: 1
       }
-      let codeFrom = this.getInfoCodeCurrency,
+      let codeFrom = this.currencyCodeFrom,
           codeTo = this.currencyCodeTo,
           amount = this.amount
       let exchangeCurrencyFrom = 1 / ((this.valutes[codeFrom]?.Value ?? baseValue.Value) / (this.valutes[codeFrom]?.Nominal ?? baseValue.Nominal))

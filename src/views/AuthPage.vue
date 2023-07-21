@@ -37,7 +37,8 @@ export default {
   methods: {
     ...mapActions(['loginUser']),
     addUser(user){
-      const loginUser = this.getUsers.find(item=>item.login === user.login && item.password === user.password)
+      const usersStorage = JSON.parse(localStorage.getItem('users')) || []
+      const loginUser = usersStorage.find(item=>item.name === user.login && item.password === user.password)
       if(loginUser){
         this.loginUser(user)
         this.$router.push('/countries')

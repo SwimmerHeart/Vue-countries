@@ -37,7 +37,8 @@ export default {
   methods: {
     ...mapActions(['registerUser']),
     addUser(user){
-      const loginUser = this.getUsers.some(item=>item.login === user.login)
+      const usersStorage = JSON.parse(localStorage.getItem('users')) || []
+      const loginUser = usersStorage.some(item=>item.login === user.login)
       if(!loginUser){
         this.registerUser(user)
         this.$router.push('/countries')
@@ -46,7 +47,7 @@ export default {
       else this.isAuth = true
     }
   },
-  computed: mapGetters(['getUsers'])
+  // computed: mapGetters(['getUsers'])
 }
 </script>
 

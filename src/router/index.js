@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        meta: {layout: 'auth'},
+        meta: {layout: 'auth', auth: false},
         redirect: '/countries'
     },
     {

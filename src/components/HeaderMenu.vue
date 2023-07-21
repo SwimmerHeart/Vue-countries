@@ -10,52 +10,24 @@
         <h5 class="title">{{ getUserName }}</h5>
       </b-navbar-item>
       <b-navbar-item tag="div">
-        <SelectCountryName v-model="selectedItem"
-                           placeholder="Country"
-                           icon="earth"
-        />
+        <CountryUser />
       </b-navbar-item>
       <b-navbar-item tag="div">
-        <VButton class="button is-light"
-                 @click="logOut"
-        >
-          LogOut
-        </VButton>
+        <ButtonLogOut />
       </b-navbar-item>
     </template>
   </b-navbar>
 </template>
 
 <script>
-import SelectCountryName from "@/components/select/SelectCountryName"
-import VButton from "@/components/framework/button/VButton"
-import {mapActions, mapGetters} from 'vuex'
+import ButtonLogOut from "@/components/ButtonLogOut"
+import CountryUser from "@/components/SelectCountry"
+import {mapGetters} from 'vuex'
 
 export default {
   name: "HeaderMenu",
-  components: {VButton, SelectCountryName},
-  data() {
-    return {
-    }
-  },
-  methods:{
-    ...mapActions(['logoutUser', 'setCountryUser']),
-    logOut(){
-      this.logoutUser()
-      this.$router.push('/login')
-    }
-  },
-  computed: {
-    ...mapGetters(['getUserName','getCountryUser']),
-    selectedItem: {
-      get() {
-        return this.getCountryUser
-      },
-      set(value) {
-        this.setCountryUser(value)
-      }
-    },
-  },
+  components: {CountryUser, ButtonLogOut},
+  computed: mapGetters(['getUserName'])
 }
 </script>
 

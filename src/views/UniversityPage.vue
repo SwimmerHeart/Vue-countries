@@ -14,6 +14,9 @@
 <script>
 export default {
   name: "UniversityPage",
+  mounted() {
+    console.log(this.$route)
+  },
   methods:{
     goBack(){
       this.$router.go(-1)
