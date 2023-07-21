@@ -21,21 +21,19 @@ export const getUniversitiesCountByName = async (name, options) => {
     return listAll.length
 }
 
-export const getUniversitiesDataByName = async (name, params, options) => {
+export const getUniversitiesDataByName = async (name, params={}, options) => {
     const _params = {country: name}
     const list = await GET(baseUrl, _params, options)
-    // console.log('list', list)
     const {page, count} = params
-    const start = (page - 1) * count
-    return list.slice(start, start + count)
+    if(page && count) {
+        const start = (page - 1) * count
+        return list.slice(start, start + count)
+    } else return await GET(baseUrl, _params, options)
 }
 export const getUniversitiesDataAllByName = async (shortName, longName, params, options) => {
     const listAll = await getResultsPromises(shortName, longName, options)
     const {page, count} = params
-    console.log(params)
     const start = (page - 1) * count
-    console.log('start', start)
-    console.log('listAll', listAll.slice(start, start + Number(count)))
     return listAll.slice(start, start + Number(count))
 }
 

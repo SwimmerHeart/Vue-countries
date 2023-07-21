@@ -6,31 +6,43 @@
     <div class="columns">
       <p class="column is-size-4"><strong>Страна:</strong> {{ country }}</p>
       <p class="column is-size-4"><strong>Сайт:</strong> <a
-          :href="$attrs.props?.web_pages[0]">{{ universityWebpage }}</a></p>
+          :href="universityWebPage">{{ universityWebPage }}</a></p>
     </div>
   </section>
 </template>
 
 <script>
+import {getUniversitiesDataByName} from "@/api/universities";
+
 export default {
   name: "UniversityPage",
   mounted() {
-    console.log(this.$route)
+    this.getUniversities()
   },
-  methods:{
-    goBack(){
-      this.$router.go(-1)
+  data() {
+    return {
+      university: {}
     }
   },
-  computed:{
-    universityName () {
-      return this.$route.params.props.name
+  methods: {
+    async getUniversities() {
+      try {
+        const universityData = await getUniversitiesDataByName(this.$route.params.codeCountry)
+        this.university = universityData.find(item=>item.name === this.$route.params.nameUniversity)
+      } catch (error) {
+        console.log(error)
+      }
     },
-    country () {
-      return this.$route.params.props.country
+  },
+  computed: {
+    universityName() {
+      return this.university.name
     },
-    universityWebpage () {
-      return this.$route.params.props?.web_pages[0]
+    country() {
+      return this.$route.params.codeCountry
+    },
+    universityWebPage() {
+      return this.university.web_pages ? this.university.web_pages[0] : ''
     },
   }
 }

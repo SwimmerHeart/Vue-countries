@@ -82,7 +82,6 @@ export default {
     async getUniversities(){
       try {
         this.loading = true
-        console.log(this.country, this.nameOfficial)
           this.totalCount = await getUniversitiesCountByName({
             shortName: this.country,
             longName: this.nameOfficial
@@ -104,14 +103,12 @@ export default {
       this.getUniversities()
     },
     clicked(event) {
-      console.log(event);
       this.$router.push(`/countries/${event.country}/university/${event.name}`)
     },
     goToUniversityInfo(university) {
       if (university) {
-        console.log(this.$route)
         this.$router.push({ name: 'university',
-          params: { nameUniversity: university.name, props: university}})
+          params: { nameUniversity: university.name}})
       }
     },
   },
