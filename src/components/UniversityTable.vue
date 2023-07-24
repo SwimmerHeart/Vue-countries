@@ -9,7 +9,6 @@
     </b-field>
     <b-table
         :data="isEmpty ? universities : []"
-        :columns="columns"
         striped
         hoverable
         focusable
@@ -26,16 +25,47 @@
         @dblclick="clicked"
         @click="goToUniversityInfo"
     >
+      <b-table-column field="country"
+                      label="Страна"
+                      searchable
+                      centered
+                      v-slot="props">
+        {{ props.row.country }}
+      </b-table-column>
+      <b-table-column field="name"
+                      label="Название"
+                      searchable
+                      centered
+                      v-slot="props">
+        {{ props.row.name }}
+      </b-table-column>
+      <b-table-column field="web_pages"
+                      label="Сайт"
+                      searchable
+                      centered
+                      v-slot="props"
+                      class="has-text-left"
+      >
+        <span class="is-flex">
+            <svg-icon type="mdi" :path="path" class="mr-2"></svg-icon>
+          <a :href="addUrl(props.row.web_pages[0])" target="_blank">{{ props.row.web_pages[0] }}</a>
+        </span>
+      </b-table-column>
     </b-table>
   </section>
 </template>
 
 <script>
-import {getUniversitiesCountByName, getUniversitiesDataAllByName, getUniversitiesDataByName} from "@/api/universities";
+import {getUniversitiesCountByName, getUniversitiesDataAllByName} from "@/api/universities"
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiWeb } from '@mdi/js'
 
 export default {
   name: "UniversityTable",
-  props:{
+  components:{
+    SvgIcon
+  },
+  props: {
     country: {
       type: String,
       default: ''
@@ -48,46 +78,27 @@ export default {
   mounted() {
     this.getUniversities()
   },
-  data(){
-    return{
-      columns: [
-        {
-          field: 'country',
-          label: 'Страна',
-          searchable: true,
-          centered: true
-        },
-        {
-          field: 'name',
-          label: 'Название',
-          searchable: true,
-          centered: true
-        },
-        {
-          field: 'web_pages',
-          label: 'Сайт',
-          searchable: true,
-          centered: true
-        },
-      ],
+  data() {
+    return {
       universities: [],
       selected: null,
       currentPage: 1,
       perPage: 30,
       totalCount: 0,
-      loading: false
+      loading: false,
+      path: mdiWeb
     }
   },
-  methods:{
-    async getUniversities(){
+  methods: {
+    async getUniversities() {
       try {
         this.loading = true
-          this.totalCount = await getUniversitiesCountByName({
-            shortName: this.country,
-            longName: this.nameOfficial
-          })
-          this.universities = await getUniversitiesDataAllByName(this.country, this.nameOfficial,
-              {page: this.currentPage, count: this.perPage})
+        this.totalCount = await getUniversitiesCountByName({
+          shortName: this.country,
+          longName: this.nameOfficial
+        })
+        this.universities = await getUniversitiesDataAllByName(this.country, this.nameOfficial,
+            {page: this.currentPage, count: this.perPage})
         this.loading = false
       } catch (error) {
         console.log(error)
@@ -107,13 +118,18 @@ export default {
     },
     goToUniversityInfo(university) {
       if (university) {
-        this.$router.push({ name: 'university',
-          params: { nameUniversity: university.name}})
+        this.$router.push({
+          name: 'university',
+          params: {nameUniversity: university.name}
+        })
       }
     },
+    addUrl(url) {
+      return url.startsWith('http') ? url : `http://${url}`
+    }
   },
-  computed:{
-    isEmpty (){
+  computed: {
+    isEmpty() {
       return !!this.universities
     }
   }

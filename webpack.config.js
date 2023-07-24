@@ -26,7 +26,7 @@ module.exports = {
             },
             '/countries/api': {
                 target: process.env.API_COUNTRIES,
-                pathRewrite: { '^/countries/api': '' },
+                pathRewrite: { '^/countries/api/': '' },
                 changeOrigin: true
             },
             '/universities/api': {

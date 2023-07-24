@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import UniversitySection from "../../UniversitySection"
+import UniversitySection from "../components/UniversitySection"
 import CurrencyBlock from "@/components/CurrencyBlock"
 import {getCountriesDataByName, getCountriesDataAll} from "@/api/countries"
 import {mapGetters} from "vuex"

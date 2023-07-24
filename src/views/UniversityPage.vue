@@ -6,13 +6,14 @@
     <div class="columns">
       <p class="column is-size-4"><strong>Страна:</strong> {{ country }}</p>
       <p class="column is-size-4"><strong>Сайт:</strong> <a
-          :href="universityWebPage">{{ universityWebPage }}</a></p>
+          :href="webSite">{{ webSite }}</a></p>
     </div>
   </section>
 </template>
 
 <script>
-import {getUniversitiesDataByName} from "@/api/universities";
+import {getUniversitiesDataAllByName, getUniversitiesDataByName} from "@/api/universities";
+import {getCountriesDataAll} from "@/api/countries";
 
 export default {
   name: "UniversityPage",
@@ -21,14 +22,24 @@ export default {
   },
   data() {
     return {
-      university: {}
+      university: {},
+      webSite: ''
     }
   },
   methods: {
     async getUniversities() {
       try {
-        const universityData = await getUniversitiesDataByName(this.$route.params.codeCountry)
+        const data = await getCountriesDataAll()
+        const countriesNames = data.map(item=>{
+          return {
+            shortName: item.name.common,
+            fullName: item.name.official
+          }
+        })
+        const namesCountry = countriesNames.find(item=>item.shortName === this.$route.params.codeCountry)
+        const universityData = await getUniversitiesDataAllByName(namesCountry.shortName, namesCountry.fullName)
         this.university = universityData.find(item=>item.name === this.$route.params.nameUniversity)
+        this.webSite = this.university.web_pages[0]
       } catch (error) {
         console.log(error)
       }
@@ -36,14 +47,11 @@ export default {
   },
   computed: {
     universityName() {
-      return this.university.name
+      return this.$route.params.nameUniversity
     },
     country() {
       return this.$route.params.codeCountry
-    },
-    universityWebPage() {
-      return this.university.web_pages ? this.university.web_pages[0] : ''
-    },
+    }
   }
 }
 </script>
