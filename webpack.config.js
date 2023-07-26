@@ -4,10 +4,13 @@ const {VueLoaderPlugin} = require("vue-loader")
 
 
 module.exports = {
-    entry: './src/main.js',
+    entry: {
+        main: './src/main.js',
+        cacheWorker: './src/workers/cache-worker.js'
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].[contenthash:6].js',
+        filename: '[name].js',
         clean: true
     },
     devServer: {

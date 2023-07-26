@@ -22,7 +22,6 @@
         :current-page.sync="currentPage"
         :total="totalCount"
         @page-change="changePage"
-        @dblclick="clicked"
         @click="goToUniversityInfo"
     >
       <b-table-column field="country"
@@ -37,7 +36,7 @@
                       searchable
                       centered
                       v-slot="props">
-        {{ props.row.name }}
+        <a>{{ props.row.name }}</a>
       </b-table-column>
       <b-table-column field="web_pages"
                       label="Сайт"
@@ -113,10 +112,8 @@ export default {
       this.currentPage = 1
       this.getUniversities()
     },
-    clicked(event) {
-      this.$router.push(`/countries/${event.country}/university/${event.name}`)
-    },
     goToUniversityInfo(university) {
+      console.log('university', university)
       if (university) {
         this.$router.push({
           name: 'university',

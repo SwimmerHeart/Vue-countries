@@ -1,8 +1,7 @@
 import {GET} from "@/api/fetch";
 
-// const baseUrl = 'https://restcountries.com/v3.1/'
-const baseUrl = '/countries/api/'
-
+const baseUrl = 'https://restcountries.com/v3.1/'
+// const baseUrl = '/countries/api/'
 
 export const getCountriesArrayLength = async (params, options) => {
     const url = `${baseUrl}all?`
