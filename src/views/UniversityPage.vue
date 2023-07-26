@@ -37,7 +37,6 @@ export default {
           }
         })
         const namesCountry = countriesNames.find(item=>item.shortName === this.$route.params.codeCountry)
-        console.log(11, namesCountry.shortName, namesCountry.fullName)
         const universityData = await getUniversitiesDataAllByName(namesCountry.shortName, namesCountry.fullName)
         this.university = universityData.find(item=>item.name === this.$route.params.nameUniversity)
         this.webSite = this.university.web_pages[0]

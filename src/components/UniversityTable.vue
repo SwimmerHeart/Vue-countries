@@ -113,7 +113,6 @@ export default {
       this.getUniversities()
     },
     goToUniversityInfo(university) {
-      console.log('university', university)
       if (university) {
         this.$router.push({
           name: 'university',

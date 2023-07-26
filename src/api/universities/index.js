@@ -30,16 +30,15 @@ export const getUniversitiesDataByName = async (name, params = {}, options) => {
     if (page && count) {
         const start = (page - 1) * count
         return list.slice(start, start + count)
-    } else return await GET(baseUrl, _params, options)
+    } else return list
 }
 export const getUniversitiesDataAllByName = async (shortName, longName, params = {}, options) => {
     const listAll = await getResultsPromises(shortName, longName, options)
-    console.log('listAll',listAll)
     const {page, count} = params
     if (page && count) {
         const start = (page - 1) * count
         return listAll.slice(start, start + Number(count))
-    } else return await GET(baseUrl, params, options)
+    } else return listAll
 }
 
 
