@@ -36,6 +36,8 @@
                       searchable
                       centered
                       v-slot="props">
+<!--        <a :href=`/country/${props.row.country}/university/${props.row.name}`-->
+<!--           target="_blank">{{ props.row.name }}</a>-->
         <a>{{ props.row.name }}</a>
       </b-table-column>
       <b-table-column field="web_pages"
@@ -131,7 +133,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

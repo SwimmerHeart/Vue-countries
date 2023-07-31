@@ -1,6 +1,7 @@
 import {handlerError, handlerResponse, handlerToJSON} from "@/api/handlers";
 
 export function query(url, config, {handlers} = {}) {
+
     // console.warn('handlers', handlers)
     let _fetch = fetch(url, config).then(handlerResponse)
        let shouldBreak = false;
@@ -44,7 +45,10 @@ export function query(url, config, {handlers} = {}) {
 
 export function GET(url, params, options) {
     const paramsString = new URLSearchParams(params).toString()
-    return query(`${url}${paramsString}`, undefined, options)
+    return query(`${url}${paramsString}`, {
+        method: 'GET',
+        headers: options.headers,
+    }, options)
 }
 
 export function POST(url, data) {

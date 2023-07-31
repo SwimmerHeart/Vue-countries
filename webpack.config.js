@@ -5,8 +5,9 @@ const {VueLoaderPlugin} = require("vue-loader")
 
 module.exports = {
     entry: {
-        main: './src/main.js',
-        cacheWorker: './src/workers/cache-worker.js'
+        registryWorkers: './src/registryWorkers.js',
+        cacheWorker: './src/workers/cache-worker.js',
+        main: './src/main.js'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -105,7 +106,8 @@ module.exports = {
             title: 'Contries-Development',
             template: path.resolve(__dirname, "public", "index.html"),
             favicon: "./public/globe.png",
-            publicPath: '/'
+            publicPath: '/',
+            inject: 'body'
         }),
         new VueLoaderPlugin(),
     ],

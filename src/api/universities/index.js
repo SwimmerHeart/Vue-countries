@@ -3,8 +3,15 @@ import {GET} from "@/api/fetch"
 const baseUrl = 'http://universities.hipolabs.com/search?'
 // const baseUrl = '/universities/api/search?'
 // http://universities.hipolabs.com/search?country=Russian%20Federation
+const millisecondsInDay = 1000 * 60 * 60 * 24
+
+const setHeadersWithTime = (time, options) => {
+    const headers = {'custom-cache': time}
+    return { ...options, headers }
+}
 
 async function getResultsPromises(shortName, longName, options) {
+    options = setHeadersWithTime(millisecondsInDay, options)
     const promises = [
         GET(baseUrl, {country: shortName}, options),
         GET(baseUrl, {country: longName}, options)]
@@ -18,12 +25,14 @@ async function getResultsPromises(shortName, longName, options) {
 }
 
 export const getUniversitiesCountByName = async (name, options) => {
+    options = setHeadersWithTime(millisecondsInDay, options)
     const {shortName, longName} = name
     const listAll = await getResultsPromises(shortName, longName, options)
     return listAll.length
 }
 
 export const getUniversitiesDataByName = async (name, params = {}, options) => {
+    options = setHeadersWithTime(millisecondsInDay, options)
     const _params = {country: name}
     const list = await GET(baseUrl, _params, options)
     const {page, count} = params
@@ -33,6 +42,7 @@ export const getUniversitiesDataByName = async (name, params = {}, options) => {
     } else return list
 }
 export const getUniversitiesDataAllByName = async (shortName, longName, params = {}, options) => {
+    options = setHeadersWithTime(millisecondsInDay, options)
     const listAll = await getResultsPromises(shortName, longName, options)
     const {page, count} = params
     if (page && count) {
